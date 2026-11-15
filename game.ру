@@ -1,0 +1,33 @@
+board = [" " for _ in range(9)]
+
+def print_board():
+    for row in [board[i:i+3] for i in range(0, 9, 3)]:
+        print(" | ".join(row))
+        print("-" * 9)
+
+def check_winner():
+    win_combos = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+    for combo in win_combos:
+        if board[combo[0]] == board[combo[1]] == board[combo[2]] != " ":
+            return board[combo[0]]
+    if " " not in board:
+        return "Tie"
+    return None
+
+current_player = "X"
+while True:
+    print_board()
+    try:
+        move = int(input(f"Игрок {current_player}, выберите клетку (1-9): ")) - 1
+        if board[move] == " ":
+            board[move] = current_player
+            winner = check_winner()
+            if winner:
+                print_board()
+                print("Победил " + winner if winner != "Tie" else "Ничья!")
+                break
+            current_player = "O" if current_player == "X" else "X"
+        else:
+            print("Клетка занята!")
+    except (ValueError, IndexError):
+        print("Введите число от 1 до 9.")
